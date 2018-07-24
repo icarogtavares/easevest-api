@@ -2,7 +2,8 @@
   "name": "easevest-api",
   "version": "1.0.0",
   "engines": {
-    "node": "8.11.x"
+    "node": "8.x",
+    "npm": "5.x"
   },
   "description": "IBM Watson",
   "main": "src/index.js",
