@@ -1,7 +1,7 @@
-class AlunosController {
+class AdminController {
   constructor (service) {
     this.service = service
   }
 }
 
-module.exports = AlunosController
+module.exports = AdminController

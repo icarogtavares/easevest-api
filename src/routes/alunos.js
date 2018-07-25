@@ -1,17 +1,20 @@
 const express = require('express')
-const alunosController = require('../controllers/alunos')
+const DocumentController = require('../controllers/alunos')
+const DocumentService = require('../services/document')
 
 const router = express.Router()
 
+const documentController = new DocumentController(new DocumentService('alunos'))
+
 router.route('/')
-  .get(alunosController.findAll)
-  .post(alunosController.create)
-  .delete(alunosController.destroy)
+  .get((req, res, next) => documentController.findAll(req, res, next))
+  .post((req, res, next) => documentController.create(req, res, next))
+  .delete((req, res, next) => documentController.destroy(req, res, next))
 
 router.route('/:id')
-  .get(alunosController.findOne)
+  .get((req, res, next) => documentController.findOne(req, res, next))
 
 router.route('/query')
-  .post(alunosController.findWithQuery)
+  .post((req, res, next) => documentController.findWithQuery(req, res, next))
 
 module.exports = router
