@@ -1,7 +1,13 @@
-class AdminController {
-  constructor (service) {
-    this.service = service
-  }
+const DocumentController = require('./document')
+const { adminService }  = require('../services/admin')
+
+class AdminController extends DocumentController {
+
 }
 
-module.exports = AdminController
+const adminController = new AdminController(adminService)
+
+module.exports = {
+  AdminController,
+  adminController,
+}

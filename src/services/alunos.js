@@ -1,39 +1,16 @@
-const { initDBConnection } = require('../bin/cloudant')
+// const { initDBConnection } = require('../bin/cloudant')
+const UserService = require('./user')
 
-const findWithQuery = (selector) => {
-  const conn = initDBConnection()
-  const db = conn.db.use('alunos')
-  return db.find({ selector })
+class AlunoService extends UserService {
+  constructor () {
+    super('alunos')
+    this.isAdmin = false
+  }
 }
 
-const findAll = () => {
-  const conn = initDBConnection()
-  const db = conn.db.use('alunos')
-  return db.find({ selector: {} })
-}
-
-const findOne = (id) => {
-  const conn = initDBConnection()
-  const db = conn.db.use('alunos')
-  return db.get(id)
-}
-
-const create = ({ doc, fields }) => {
-  const conn = initDBConnection()
-  const db = conn.db.use('alunos')
-  return db.insert(doc, fields)
-}
-
-const destroy = ({ docId, docRev }) => {
-  const conn = initDBConnection()
-  const db = conn.db.use('alunos')
-  return db.destroy(docId, docRev)
-}
+const alunoService = new AlunoService()
 
 module.exports = {
-  findWithQuery,
-  findAll,
-  findOne,
-  create,
-  destroy,
+  alunoService,
+  AlunoService,
 }

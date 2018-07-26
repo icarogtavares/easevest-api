@@ -1,7 +1,13 @@
-class AlunosController {
-  constructor (service) {
-    this.service = service
-  }
+const DocumentController = require('./document')
+const { alunoService }  = require('../services/alunos')
+
+class AlunoController extends DocumentController {
+
 }
 
-module.exports = AlunosController
+const alunoController = new AlunoController(alunoService)
+
+module.exports = {
+  AlunoController,
+  alunoController,
+}

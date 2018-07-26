@@ -9,6 +9,7 @@ const {
 const jwt = require('jsonwebtoken')
 const cfg = require('../config/config')
 const { initDBConnection } = require('../bin/cloudant')
+const { userService } = require('../services/user')
 
 const params = {
   secretOrKey: cfg.security.jwtSecret,
@@ -19,12 +20,9 @@ const isNotNil = complement(isNil)
 
 module.exports = () => {
   const strategy = new Strategy(params, (payload, done) => {
-    const conn = initDBConnection()
-    const alunosDB = conn.db.use('alunos')
-    alunosDB.find({ selector: { matricula: payload.matricula } })
-      .then((result) => {
-        if (result.docs.length !== 1) { return done(null, false) }
-        const user = result.docs[0]
+    userService.findUser(payload.matricula)
+      .then((user) => {
+        if (!user) return done(null, false)
         const userToken = jwt.decode(user.access_token)
         const tokenAndPayloadEqProps = eqProps(_, userToken, payload)
         if (isNotNil(userToken) && tokenAndPayloadEqProps('id') && tokenAndPayloadEqProps('iat') && tokenAndPayloadEqProps('exp')) {

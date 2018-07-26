@@ -1,4 +1,4 @@
-const { initDBConnection } = require('../bin/cloudant')
+const { getDatabase } = require('../bin/cloudant')
 
 class DocumentService {
   constructor (dbName) {
@@ -6,33 +6,23 @@ class DocumentService {
   }
 
   findWithQuery (selector) {
-    const conn = initDBConnection()
-    const db = conn.db.use(this.dbName)
-    return db.find({ selector })
+    return getDatabase(this.dbName).find({ selector })
   }
 
   findAll () {
-    const conn = initDBConnection()
-    const db = conn.db.use(this.dbName)
-    return db.find({ selector: {} })
+    return getDatabase(this.dbName).find({ selector: {} })
   }
 
   findOne (id) {
-    const conn = initDBConnection()
-    const db = conn.db.use(this.dbName)
-    return db.get(id)
+    return getDatabase(this.dbName).get(id)
   }
 
   create ({ doc, fields }) {
-    const conn = initDBConnection()
-    const db = conn.db.use(this.dbName)
-    return db.insert(doc, fields)
+    return getDatabase(this.dbName).insert(doc, fields)
   }
 
   destroy ({ docId, docRev }) {
-    const conn = initDBConnection()
-    const db = conn.db.use(this.dbName)
-    return db.destroy(docId, docRev)
+    return getDatabase(this.dbName).destroy(docId, docRev)
   }
 }
 

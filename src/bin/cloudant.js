@@ -30,6 +30,12 @@ const initDBConnection = () => {
   return cloudant
 }
 
+const getDatabase = (dbName) => {
+  const conn = initDBConnection()
+  return conn.db.use(dbName)
+}
+
 module.exports = {
   initDBConnection,
+  getDatabase,
 }
