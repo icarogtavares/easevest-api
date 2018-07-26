@@ -1,4 +1,3 @@
-// const { initDBConnection } = require('../bin/cloudant')
 const UserService = require('./user')
 
 class AdminService extends UserService {

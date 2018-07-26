@@ -8,7 +8,6 @@ const {
 } = require('ramda')
 const jwt = require('jsonwebtoken')
 const cfg = require('../config/config')
-const { initDBConnection } = require('../bin/cloudant')
 const { userService } = require('../services/user')
 
 const params = {
