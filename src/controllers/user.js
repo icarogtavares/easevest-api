@@ -13,23 +13,24 @@ class UserController {
 
   async login (req, res, next) {
     try {
-      const { user, token } = await this.checkUserAndGenerateToken(req, this.adminService)
-      const result = await this.adminService.updateToken(user, token)
-      if (!result.ok) throw new Error(`Não foi possível atualizar token de acesso! Admin:{${this.adminService.isAdmin}}`)
-      return res.send({ token })
+      return await this.verifyUserAndLogin(req, res, this.adminService)
     } catch (err) {
       if (err._response && err._response.statusCode === 404) { // eslint-disable-line no-underscore-dangle
         try {
-          const { user, token } = await this.checkUserAndGenerateToken(req, this.alunoService)
-          const result = await this.alunoService.updateToken(user, token)
-          if (!result.ok) throw new Error(`Não foi possível atualizar token de acesso! Admin:{${this.alunoService.isAdmin}}`)
-          return res.send({ token })
+          return await this.verifyUserAndLogin(req, res, this.alunoService)
         } catch (alunoErr) {
           return next(alunoErr)
         }
       }
       return next(err)
     }
+  }
+
+  async verifyUserAndLogin (req, res, service) {
+    const { user, token } = await this.checkUserAndGenerateToken(req, service)
+    const result = await service.updateToken(user, token)
+    if (!result.ok) throw new Error(`Não foi possível atualizar token de acesso! Admin:{${service.isAdmin}}`)
+    return res.send({ token })
   }
 
   generateToken (matricula, isAdmin) { // eslint-disable-line class-methods-use-this
