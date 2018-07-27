@@ -11,6 +11,9 @@ router.route('/')
 router.route('/:id')
   .get((req, res, next) => alunoController.findOne(req, res, next))
 
+router.route('/:id/games')
+  .get((req, res, next) => alunoController.getGames(req, res, next))
+
 router.route('/query')
   .post((req, res, next) => alunoController.findWithQuery(req, res, next))
 

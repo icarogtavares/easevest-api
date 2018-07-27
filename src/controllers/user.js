@@ -30,7 +30,7 @@ class UserController {
     const { user, token } = await this.checkUserAndGenerateToken(req, service)
     const result = await service.updateToken(user, token)
     if (!result.ok) throw new Error(`Não foi possível atualizar token de acesso! Admin:{${service.isAdmin}}`)
-    return res.send({ token })
+    return res.send({ token, isAdmin: service.isAdmin })
   }
 
   generateToken (matricula, isAdmin) { // eslint-disable-line class-methods-use-this
