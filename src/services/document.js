@@ -1,4 +1,5 @@
 const { getDatabase } = require('../bin/cloudant')
+const { dissoc } = require('ramda')
 
 class DocumentService {
   constructor (dbName) {
@@ -23,6 +24,10 @@ class DocumentService {
 
   destroy ({ docId, docRev }) {
     return getDatabase(this.dbName).destroy(docId, docRev)
+  }
+
+  static removeDocId (doc) {
+    return dissoc('_rev', (dissoc('rev', dissoc('_id', dissoc('id', doc)))))
   }
 }
 

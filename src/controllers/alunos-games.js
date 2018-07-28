@@ -10,6 +10,15 @@ class AlunosGamesController extends DocumentController {
       next(err)
     }
   }
+
+  async getGame (req, res, next) {
+    try {
+      const result = await this.service.getGame(req.params.alunoId, req.params.gameId)
+      res.send(result)
+    } catch (err) {
+      next(err)
+    }
+  }
 }
 
 const alunosGamesController = new AlunosGamesController(alunosGamesService)

@@ -1,6 +1,5 @@
 const express = require('express')
 const { alunoController } = require('../controllers/alunos')
-const { alunosGamesController } = require('../controllers/alunos-games')
 
 const router = express.Router()
 
@@ -11,9 +10,6 @@ router.route('/')
 
 router.route('/:id')
   .get((req, res, next) => alunoController.findOne(req, res, next))
-
-router.route('/:id/games')
-  .get((req, res, next) => alunosGamesController.getGames(req, res, next))
 
 router.route('/query')
   .post((req, res, next) => alunoController.findWithQuery(req, res, next))
