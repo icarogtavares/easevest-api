@@ -17,7 +17,6 @@ class AlunosGamesService extends DocumentService {
           respondido: false,
         }
       })
-      console.log(newDoc)
       return super.create({ doc: newDoc })
     } catch (err) {
       return Promise.reject(err)
@@ -59,6 +58,27 @@ class AlunosGamesService extends DocumentService {
       jogo.nome = btgame.nome
       jogo.estagio = stage
       jogo.respostas = btgame[stage]
+      return Promise.resolve(jogo || [])
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  }
+
+  async getLastNotAnsweredGameStage (alunoMatricula, gameId) {
+    try {
+      const jogo = await this.findOne(gameId)
+      if (!jogo) throw new Error('Jogo não encontrado!')
+      if (jogo.aluno_matricula !== alunoMatricula) throw new Error('Jogo não pertence a esse aluno')
+      const btgame = await btGamesService.findOne(jogo.gameId)
+      let stageNotAnswered = null
+      gameStages.forEach((stage) => {
+        if (!jogo[stage].respondido && !stageNotAnswered) {
+          stageNotAnswered = stage
+        }
+      })
+      jogo.nome = btgame.nome
+      jogo.estagio = stageNotAnswered
+      jogo.respostas = btgame[stageNotAnswered]
       return Promise.resolve(jogo || [])
     } catch (err) {
       return Promise.reject(err)
