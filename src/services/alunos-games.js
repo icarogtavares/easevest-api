@@ -1,5 +1,6 @@
 const DocumentService = require('./document')
 const { btGamesService } = require('./btgames')
+const gameStages = require('../models/GameStages')
 
 class AlunosGamesService extends DocumentService {
   constructor () {
@@ -9,8 +10,15 @@ class AlunosGamesService extends DocumentService {
   async create ({ doc }) {
     try {
       const btgame = await btGamesService.findOne(doc.gameId)
-      if (btgame) return super.create({ doc })
-      throw new Error('Jogo não existe no sistema!')
+      if (!btgame) throw new Error('Jogo não existe no sistema!')
+      const newDoc = doc
+      gameStages.forEach((stage) => {
+        newDoc[stage] = {
+          respondido: false,
+        }
+      })
+      console.log(newDoc)
+      return super.create({ doc: newDoc })
     } catch (err) {
       return Promise.reject(err)
     }
@@ -35,6 +43,22 @@ class AlunosGamesService extends DocumentService {
       if (jogo.aluno_matricula !== alunoMatricula) throw new Error('Jogo não pertence a esse aluno')
       const btgame = await btGamesService.findOne(jogo.gameId)
       jogo.nome = btgame.nome
+      return Promise.resolve(jogo || [])
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  }
+
+  async getGameStage (alunoMatricula, gameId, stage) {
+    try {
+      console.log(alunoMatricula, gameId, stage)
+      const jogo = await this.findOne(gameId)
+      if (!jogo) throw new Error('Jogo não encontrado!')
+      if (jogo.aluno_matricula !== alunoMatricula) throw new Error('Jogo não pertence a esse aluno')
+      const btgame = await btGamesService.findOne(jogo.gameId)
+      jogo.nome = btgame.nome
+      jogo.estagio = stage
+      jogo.respostas = btgame[stage]
       return Promise.resolve(jogo || [])
     } catch (err) {
       return Promise.reject(err)
