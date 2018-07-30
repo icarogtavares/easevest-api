@@ -11,7 +11,7 @@ router.route('/:alunoId/games/:gameId')
   .get((req, res, next) => alunosGamesController.getGame(req, res, next))
 
 router.route('/:alunoId/games/:gameId/stage/')
-  .get((req, res, next) => alunosGamesController.getLastNotAnsweredGameStage(req, res, next))
+  .get((req, res, next) => alunosGamesController.getLastNotAnsweredGameStage(req, res, next)) // eslint-disable-line
 
 router.route('/:alunoId/games/:gameId/stage/:stage')
   .get((req, res, next) => alunosGamesController.getGameStage(req, res, next))
