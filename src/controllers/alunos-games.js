@@ -9,13 +9,18 @@ class AlunosGamesController extends DocumentController {
     return null
   }
 
-  update (req, res, next) {
+  async update (req, res, next) {
     const error = AlunosGamesController.alunoNaoPermitidoError(req)
     if (error) return next(error)
-    console.log(req.body)
-    return this.service.update(req.body)
-      .then(result => res.send(result))
-      .catch(err => next(err))
+    try {
+      if (req.body.doc.custos.respondido) {
+        req.body.doc.finalizado = true
+      }
+      const result = await this.service.update(req.params.gameId, req.body)
+      return res.send(result)
+    } catch (err) {
+      return next(err)
+    }
   }
 
   async getGames (req, res, next) {

@@ -22,10 +22,11 @@ class DocumentService {
     return getDatabase(this.dbName).insert(doc, fields)
   }
 
-  update ({ doc, fields }) {
+  update (id, { doc, fields }) {
     let newDoc = clone(doc)
+    newDoc._id = id
     delete newDoc._rev
-    return this.findOne(newDoc._id)
+    return this.findOne(id)
       .then((dbDoc) => {
         newDoc = mergeDeepRight(dbDoc, newDoc)
         return this.create({ doc: newDoc, fields })
