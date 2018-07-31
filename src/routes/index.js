@@ -4,6 +4,7 @@ const alunosRoutes = require('./alunos')
 const alunosGamesRoutes = require('./alunos-games')
 const adminsRoutes = require('./admin')
 const userRoutes = require('./user')
+const btGamesRoutes = require('./btgames')
 
 const router = express.Router()
 
@@ -11,6 +12,7 @@ router.use('/message', assistantRoutes)
 router.use('/alunos', alunosRoutes)
 router.use('/alunos', alunosGamesRoutes)
 router.use('/admins', adminsRoutes)
+router.use('/btgames', btGamesRoutes)
 router.use('/', userRoutes)
 
 module.exports = router

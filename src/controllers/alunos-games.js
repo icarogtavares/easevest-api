@@ -13,7 +13,7 @@ class AlunosGamesController extends DocumentController {
     const error = AlunosGamesController.alunoNaoPermitidoError(req)
     if (error) return next(error)
     try {
-      if (req.body.doc.custos.respondido) {
+      if (req.body.doc.custos && req.body.doc.custos.respondido) {
         req.body.doc.finalizado = true
       }
       const result = await this.service.update(req.params.gameId, req.body)

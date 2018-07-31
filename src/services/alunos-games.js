@@ -38,7 +38,6 @@ class AlunosGamesService extends DocumentService {
   }
 
   async getGame (alunoMatricula, gameId) {
-    console.log(gameId)
     try {
       const jogo = await this.findOne(gameId)
       if (!jogo) throw new Error('Jogo não encontrado!')
