@@ -27,6 +27,12 @@ class DocumentController {
       .catch(err => next(err))
   }
 
+  update (req, res, next) {
+    this.service.update(req.body)
+      .then(result => res.send(result))
+      .catch(err => next(err))
+  }
+
   destroy (req, res, next) {
     this.service.destroy(req.body)
       .then(result => res.send(result))

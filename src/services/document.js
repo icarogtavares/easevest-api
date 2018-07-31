@@ -1,6 +1,6 @@
 const { getDatabase } = require('../bin/cloudant')
-const { dissoc } = require('ramda')
-
+const { dissoc, mergeDeepRight, clone } = require('ramda')
+/* eslint-disable no-underscore-dangle */
 class DocumentService {
   constructor (dbName) {
     this.dbName = dbName
@@ -20,6 +20,16 @@ class DocumentService {
 
   create ({ doc, fields }) {
     return getDatabase(this.dbName).insert(doc, fields)
+  }
+
+  update ({ doc, fields }) {
+    let newDoc = clone(doc)
+    delete newDoc._rev
+    return this.findOne(newDoc._id)
+      .then((dbDoc) => {
+        newDoc = mergeDeepRight(dbDoc, newDoc)
+        return this.create({ doc: newDoc, fields })
+      })
   }
 
   destroy ({ docId, docRev }) {

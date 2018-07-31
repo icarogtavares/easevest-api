@@ -2,42 +2,66 @@ const DocumentController = require('./document')
 const { alunosGamesService } = require('../services/alunos-games')
 
 class AlunosGamesController extends DocumentController {
+  static alunoNaoPermitidoError (req) {
+    if (req.params.alunoId && req.params.alunoId !== req.user._id) { // eslint-disable-line no-underscore-dangle
+      return new Error('Aluno não permitido.')
+    }
+    return null
+  }
+
+  update (req, res, next) {
+    const error = AlunosGamesController.alunoNaoPermitidoError(req)
+    if (error) return next(error)
+    console.log(req.body)
+    return this.service.update(req.body)
+      .then(result => res.send(result))
+      .catch(err => next(err))
+  }
+
   async getGames (req, res, next) {
+    const error = AlunosGamesController.alunoNaoPermitidoError(req)
+    if (error) return next(error)
     try {
-      const result = await this.service.getGames(req.params.id)
-      res.send(result)
+      const result = await this.service.getGames(req.params.alunoId)
+      return res.send(result)
     } catch (err) {
-      next(err)
+      return next(err)
     }
   }
 
   async getGame (req, res, next) {
+    const error = AlunosGamesController.alunoNaoPermitidoError(req)
+    if (error) return next(error)
     try {
       const { alunoId, gameId } = req.params
       const result = await this.service.getGame(alunoId, gameId)
-      res.send(result)
+      return res.send(result)
     } catch (err) {
-      next(err)
+      return next(err)
     }
   }
 
   async getGameStage (req, res, next) {
+    const error = AlunosGamesController.alunoNaoPermitidoError(req)
+    if (error) return next(error)
     try {
       const { alunoId, gameId, stage } = req.params
       const result = await this.service.getGameStage(alunoId, gameId, stage)
-      res.send(result)
+      return res.send(result)
     } catch (err) {
-      next(err)
+      return next(err)
     }
   }
 
   async getLastNotAnsweredGameStage (req, res, next) {
+    const error = AlunosGamesController.alunoNaoPermitidoError(req)
+    if (error) return next(error)
     try {
       const { alunoId, gameId } = req.params
-      const result = await this.service.getLastNotAnsweredGameStage(alunoId, gameId)
-      res.send(result)
+      const result = await this.service.getLastNotAnsweredGameStage(alunoId, gameId) // eslint-disable-line max-len
+      return res.send(result)
     } catch (err) {
-      next(err)
+      return next(err)
     }
   }
 }

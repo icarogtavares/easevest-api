@@ -1,6 +1,7 @@
 const DocumentService = require('./document')
 const { btGamesService } = require('./btgames')
 const gameStages = require('../models/GameStages')
+const { mergeDeepLeft } = require('ramda')
 
 class AlunosGamesService extends DocumentService {
   constructor () {
@@ -11,12 +12,13 @@ class AlunosGamesService extends DocumentService {
     try {
       const btgame = await btGamesService.findOne(doc.gameId)
       if (!btgame) throw new Error('Jogo não existe no sistema!')
-      const newDoc = doc
+      const docWithStages = {}
       gameStages.forEach((stage) => {
-        newDoc[stage] = {
+        docWithStages[stage] = {
           respondido: false,
         }
       })
+      const newDoc = mergeDeepLeft(doc, docWithStages)
       return super.create({ doc: newDoc })
     } catch (err) {
       return Promise.reject(err)
