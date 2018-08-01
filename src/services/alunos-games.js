@@ -1,6 +1,7 @@
 const DocumentService = require('./document')
 const { btGamesService } = require('./btgames')
 const gameStages = require('../models/GameStages')
+const GameStagesEnum = require('../models/GameStagesEnum')
 const { mergeDeepLeft } = require('ramda')
 
 class AlunosGamesService extends DocumentService {
@@ -58,6 +59,7 @@ class AlunosGamesService extends DocumentService {
       const btgame = await btGamesService.findOne(jogo.gameId)
       jogo.nome = btgame.nome
       jogo.estagio = stage
+      jogo.estagioString = GameStagesEnum[stage]
       jogo.respostas = btgame[stage]
       return Promise.resolve(jogo || [])
     } catch (err) {
@@ -79,6 +81,7 @@ class AlunosGamesService extends DocumentService {
       })
       jogo.nome = btgame.nome
       jogo.estagio = stageNotAnswered
+      jogo.estagioString = GameStagesEnum[stageNotAnswered]
       jogo.respostas = btgame[stageNotAnswered]
       return Promise.resolve(jogo || [])
     } catch (err) {

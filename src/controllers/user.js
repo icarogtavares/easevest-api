@@ -12,37 +12,37 @@ class UserController {
   }
 
   async login (req, res, next) {
+    // try {
+    //   return await this.verifyUserAndLogin(req, res, this.adminService)
+    // } catch (err) {
+    // if (err._response && err._response.statusCode === 404) { // eslint-disable-line no-underscore-dangle
     try {
-      return await this.verifyUserAndLogin(req, res, this.adminService)
-    } catch (err) {
-      if (err._response && err._response.statusCode === 404) { // eslint-disable-line no-underscore-dangle
-        try {
-          return await this.verifyUserAndLogin(req, res, this.alunoService)
-        } catch (alunoErr) {
-          return next(alunoErr)
-        }
-      }
-      return next(err)
+      return await this.verifyUserAndLogin(req, res, this.alunoService)
+    } catch (alunoErr) {
+      return next(alunoErr)
     }
+    // }
+    // return next(err)
+    // }
   }
 
   async verifyUserAndLogin (req, res, service) {
     const { user, token } = await this.checkUserAndGenerateToken(req, service)
     const result = await service.updateToken(user, token)
-    if (!result.ok) throw new Error(`Não foi possível atualizar token de acesso! Admin:{${service.isAdmin}}`)
-    return res.send({ token, isAdmin: service.isAdmin })
+    if (!result.ok) throw new Error('Não foi possível atualizar token de acesso!')
+    return res.send({ token, role: user.role })
   }
 
-  generateToken (matricula, isAdmin) { // eslint-disable-line class-methods-use-this
-    const payload = { matricula, isAdmin }
+  generateToken (matricula, role) { // eslint-disable-line class-methods-use-this
+    const payload = { matricula, role }
     return jwt.sign(payload, cfg.security.jwtSecret, { expiresIn: '7d' })
   }
 
   async checkUserAndGenerateToken (req, service) {
     const user = await service.findOne(req.body.matricula)
-    if (!user) throw new Error(`Usuário é vazio ou nulo! {${service.isAdmin}}`)
-    if (!compareSync(req.body.senha, user.senha)) throw new Error(`Senha inválida! Admin:{${service.isAdmin}}`)
-    const token = this.generateToken(user.matricula, service.isAdmin)
+    if (!user) throw new Error(`Usuário é vazio ou nulo! {${user.role}}`)
+    if (!compareSync(req.body.senha, user.senha)) throw new Error(`Senha inválida! Rol:{${user.role}}`)
+    const token = this.generateToken(user.matricula, user.role)
     return { user, token }
   }
 }

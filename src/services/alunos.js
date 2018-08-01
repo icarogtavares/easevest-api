@@ -4,7 +4,6 @@ const UserService = require('./user')
 class AlunoService extends UserService {
   constructor () {
     super('alunos')
-    this.isAdmin = false
   }
 }
 
