@@ -24,7 +24,7 @@ module.exports = () => {
     if (!user) return done(null, false)
     const userToken = jwt.decode(user.access_token)
     const tokenAndPayloadEqProps = eqProps(__, userToken, payload)
-    if (isNotNil(userToken) && tokenAndPayloadEqProps('isAdmin') && tokenAndPayloadEqProps('matricula') && tokenAndPayloadEqProps('iat') && tokenAndPayloadEqProps('exp')) {
+    if (isNotNil(userToken) && tokenAndPayloadEqProps('role') && tokenAndPayloadEqProps('matricula') && tokenAndPayloadEqProps('iat') && tokenAndPayloadEqProps('exp')) {
       return done(null, user)
     }
     return done(null, false)
