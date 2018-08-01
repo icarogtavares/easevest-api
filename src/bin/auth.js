@@ -8,8 +8,7 @@ const {
 } = require('ramda')
 const jwt = require('jsonwebtoken')
 const cfg = require('../config/config')
-const { adminService } = require('../services/admin')
-const { alunoService } = require('../services/alunos')
+const { userService } = require('../services/users')
 
 const params = {
   secretOrKey: cfg.security.jwtSecret,
@@ -19,8 +18,8 @@ const params = {
 const isNotNil = complement(isNil)
 
 module.exports = () => {
-  const authUser = async (done, payload, service) => {
-    const user = await service.findOne(payload.matricula)
+  const authUser = async (done, payload) => {
+    const user = await userService.findOne(payload.matricula)
     if (!user) return done(null, false)
     const userToken = jwt.decode(user.access_token)
     const tokenAndPayloadEqProps = eqProps(__, userToken, payload)
@@ -32,11 +31,8 @@ module.exports = () => {
 
   const strategy = new Strategy(params, async (payload, done) => {
     try {
-      return await authUser(done, payload, adminService)
+      return authUser(done, payload)
     } catch (err) {
-      if (err._response && err._response.statusCode === 404) { // eslint-disable-line no-underscore-dangle
-        return authUser(done, payload, alunoService)
-      }
       return done(err, null)
     }
   })

@@ -29,7 +29,9 @@ class AlunosGamesService extends DocumentService {
   async getGames (alunoMatricula) {
     try {
       const jogos = await this.findWithQuery({
-        aluno_matricula: alunoMatricula,
+        selector: {
+          aluno_matricula: alunoMatricula,
+        },
       })
       if (!jogos) throw new Error('Jogos não encontrados!')
       return Promise.resolve(jogos || [])

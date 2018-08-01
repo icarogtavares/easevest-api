@@ -4,7 +4,7 @@ const express = require('express')
 
 const auth = require('../bin/auth')
 const routes = require('../routes/')
-const userRoutes = require('../routes/user')
+const loginRoutes = require('../routes/login')
 
 const configureExpress = () => {
   const app = express()
@@ -15,7 +15,7 @@ const configureExpress = () => {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
 
-  app.use('/api', userRoutes)
+  app.use('/api', loginRoutes)
   app.use('/api', auth().authenticate(), routes)
 
   app.use((req, res, next) => {

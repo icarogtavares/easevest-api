@@ -6,8 +6,8 @@ class DocumentService {
     this.dbName = dbName
   }
 
-  findWithQuery (selector) {
-    return getDatabase(this.dbName).find({ selector })
+  findWithQuery (query) {
+    return getDatabase(this.dbName).find(query)
   }
 
   findAll () {
