@@ -60,7 +60,7 @@ class UserController extends DocumentController {
     if (result && result.docs && result.docs[0]) {
       [user] = result.docs
     }
-    if (!user) throw new Error(`Usuário é vazio ou nulo! {${user.role}}`)
+    if (!user) throw new Error('Usuário é vazio ou nulo!')
     if (!compareSync(req.body.senha, user.senha)) throw new Error(`Senha inválida! Role:{${user.role}}`)
     const token = this.generateToken(user.matricula, user.role)
     return { user, token }
