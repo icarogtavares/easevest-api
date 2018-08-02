@@ -35,8 +35,10 @@ class UserService extends DocumentService {
       },
       fields: [
         '_id',
+        '_rev',
         'matricula',
         'nome',
+        'role',
       ],
     })
   }
@@ -48,8 +50,10 @@ class UserService extends DocumentService {
       },
       fields: [
         '_id',
+        '_rev',
         'matricula',
         'nome',
+        'role',
       ],
     })
   }
