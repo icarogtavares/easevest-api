@@ -13,5 +13,6 @@ router.route('/query')
 
 router.route('/:id')
   .get((req, res, next) => userController.findOne(req, res, next))
+  .put((req, res, next) => userController.update(req, res, next))
 
 module.exports = router

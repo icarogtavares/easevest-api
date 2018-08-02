@@ -15,6 +15,14 @@ class UserService extends DocumentService {
     return super.create({ doc, fields })
   }
 
+  update (id, { doc, fields }) {
+    if (doc && doc.senha) { // eslint-disable-line no-underscore-dangle
+      const salt = genSaltSync()
+      doc.senha = hashSync(doc.senha, salt) // eslint-disable-line no-param-reassign
+    }
+    return super.update(id, { doc, fields })
+  }
+
   updateToken (user, access_token) { // eslint-disable-line camelcase
     user.access_token = access_token // eslint-disable-line no-param-reassign, camelcase
     return this.create({ doc: user })
@@ -26,6 +34,7 @@ class UserService extends DocumentService {
         role: 'user',
       },
       fields: [
+        '_id',
         'matricula',
         'nome',
       ],
@@ -38,6 +47,7 @@ class UserService extends DocumentService {
         role: 'admin',
       },
       fields: [
+        '_id',
         'matricula',
         'nome',
       ],

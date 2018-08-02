@@ -3,7 +3,7 @@ const { alunosGamesService } = require('../services/alunos-games')
 
 class AlunosGamesController extends DocumentController {
   static alunoNaoPermitidoError (req) {
-    if (req.params.alunoId && req.params.alunoId !== req.user._id) { // eslint-disable-line no-underscore-dangle
+    if (req.params.alunoId && req.params.alunoId !== req.user.matricula) { // eslint-disable-line no-underscore-dangle
       return new Error('Aluno não permitido.')
     }
     return null

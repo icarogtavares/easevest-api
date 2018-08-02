@@ -19,7 +19,15 @@ const isNotNil = complement(isNil)
 
 module.exports = () => {
   const authUser = async (done, payload) => {
-    const user = await userService.findOne(payload.matricula)
+    const result = await userService.findWithQuery({
+      selector: {
+        matricula: payload.matricula,
+      },
+    })
+    let user = null
+    if (result && result.docs && result.docs[0]) {
+      [user] = result.docs
+    }
     if (!user) return done(null, false)
     const userToken = jwt.decode(user.access_token)
     const tokenAndPayloadEqProps = eqProps(__, userToken, payload)
