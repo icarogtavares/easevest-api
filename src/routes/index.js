@@ -1,5 +1,5 @@
 const express = require('express')
-const assistantRoutes = require('./watson-assistant')
+// const assistantRoutes = require('./watson-assistant')
 const userRoutes = require('./users')
 const alunoRoutes = require('./alunos')
 const adminRoutes = require('./admin')
@@ -8,7 +8,7 @@ const btGamesRoutes = require('./btgames')
 
 const router = express.Router()
 
-router.use('/message', assistantRoutes)
+// router.use('/message', assistantRoutes)
 router.use('/users', userRoutes)
 router.use('/alunos', alunoRoutes)
 router.use('/admins', adminRoutes)
