@@ -3,23 +3,23 @@ const { dissoc, mergeDeepRight, clone } = require('ramda')
 /* eslint-disable no-underscore-dangle */
 class DocumentService {
   constructor (dbName) {
-    this.dbName = dbName
+    this.db = getDatabase(dbName)
   }
 
   findWithQuery (query) {
-    return getDatabase(this.dbName).find(query)
+    return this.db.find(query)
   }
 
   findAll () {
-    return getDatabase(this.dbName).find({ selector: {} })
+    return this.db.find({ selector: {} })
   }
 
   findOne (id) {
-    return getDatabase(this.dbName).get(id)
+    return this.db.get(id)
   }
 
   create ({ doc, fields }) {
-    return getDatabase(this.dbName).insert(doc, fields)
+    return this.db.insert(doc, fields)
   }
 
   update (id, { doc, fields }) {
@@ -34,7 +34,7 @@ class DocumentService {
   }
 
   destroy ({ docId, docRev }) {
-    return getDatabase(this.dbName).destroy(docId, docRev)
+    return this.db.destroy(docId, docRev)
   }
 
   static removeDocId (doc) {
