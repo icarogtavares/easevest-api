@@ -12,11 +12,15 @@ const getCloudant = (params) => {
   const { url, iamApiKey } = params
   return Cloudant({
     url,
-    plugins: [
-      {
-        iamauth: { iamApiKey },
+    maxAttempt: 5,
+    plugins: [{
+      iamauth: { iamApiKey },
+    }, {
+      retry: {
+        retryErrors: false,
       },
-      'promises',
+    },
+    'promises',
     ],
   })
 }
